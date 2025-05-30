@@ -1,54 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import useFetch from '../hooks/useFetch';
 
-const LibroList = () => {
-  const [libros, setLibros] = useState([]);
-  const [cargando, setCargando] = useState(true);
+const Books = ({ onEdit }) => {
+  const API_URL = 'http://127.0.0.1:8000/api/book';
+  const { data: libros, loading, error } = useFetch(API_URL);
 
-  // Cambia esta URL por la de tu API
-  const API_URL = 'http://127.0.0.1:8000/book';
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+        <p className="ml-4 text-blue-500 font-semibold">Cargando libros...</p>
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    axios.get(API_URL)
-      .then(response => {
-        setLibros(response.data);
-        setCargando(false);
-      })
-      .catch(error => {
-        console.error('Error al cargar los libros:', error);
-        setCargando(false);
-      });
-  }, []);
-
-  if (cargando) return <p>Cargando libros...</p>;
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500 font-semibold">
+          ❌ Error al cargar los libros: {error.message}
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Lista de Libros</h2>
-      <table className="min-w-full border">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="p-2 border">Título</th>
-            <th className="p-2 border">Autor</th>
-            <th className="p-2 border">Año</th>
-            <th className="p-2 border">Categoría</th>
-            <th className="p-2 border">Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          {libros.map(libro => (
-            <tr key={libro.id}>
-              <td className="p-2 border">{libro.titulo}</td>
-              <td className="p-2 border">{libro.autor}</td>
-              <td className="p-2 border">{libro.anio_publicacion}</td>
-              <td className="p-2 border">{libro.categoria}</td>
-              <td className="p-2 border">{libro.estado}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Lista de Libros</h2>
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {libros.map((libro) => (
+          <li
+            key={libro.id}
+            className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow"
+          >
+            <h3 className="text-xl font-semibold text-gray-800">{libro.titulo}</h3>
+            <p className="text-gray-600">Autor: {libro.autor}</p>
+            <p className="text-gray-600">Año: {libro.anio_publicacion}</p>
+            <p className="text-gray-600">Categoría: {libro.categoria}</p>
+            <button
+              onClick={() => onEdit(libro.id)}
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Editar
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default LibroList;
+export default Books;
