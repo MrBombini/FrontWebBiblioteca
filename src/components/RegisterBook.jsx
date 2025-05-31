@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import useFetch from '../hooks/useFetch';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 
 const RegistrarLibro = () => {
   const [formulario, setFormulario] = useState({
@@ -10,10 +13,9 @@ const RegistrarLibro = () => {
     estado: 'disponible',
   });
 
-  const [mensaje, setMensaje] = useState('');
   const [errores, setErrores] = useState({});
-
-  const { setData: registrarLibro } = useFetch('http://127.0.0.1:8000/api/book', 'POST');
+  const { execute, loading } = useFetch('http://127.0.0.1:8000/api/book', 'POST', null, false);
+  const navigate = useNavigate();
 
   const manejarCambio = (e) => {
     const { name, value } = e.target;
@@ -22,12 +24,18 @@ const RegistrarLibro = () => {
 
   const manejarEnvio = async (e) => {
     e.preventDefault();
-    setMensaje('');
     setErrores({});
-
     try {
-      await registrarLibro(formulario);
-      setMensaje('✅ Libro registrado exitosamente');
+      await execute(formulario, 'POST');
+      toast.success("Libro registrado exitosamente.", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        onClose: () => navigate('/books')
+      });
       setFormulario({
         titulo: '',
         autor: '',
@@ -39,7 +47,14 @@ const RegistrarLibro = () => {
       if (error.response && error.response.status === 422) {
         setErrores(error.response.data.errors);
       } else {
-        setMensaje('❌ Error al registrar el libro');
+        toast.error("❌ Error al registrar el libro", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       }
     }
   };
@@ -47,15 +62,6 @@ const RegistrarLibro = () => {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Registrar Nuevo Libro</h2>
-      {mensaje && (
-        <p
-          className={`text-center font-semibold mb-4 ${
-            mensaje.startsWith('✅') ? 'text-green-500' : 'text-red-500'
-          }`}
-        >
-          {mensaje}
-        </p>
-      )}
       <form onSubmit={manejarEnvio} className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
         <div className="mb-4">
           <label className="block text-gray-700 font-semibold">Título:</label>
@@ -118,10 +124,12 @@ const RegistrarLibro = () => {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          disabled={loading}
         >
-          Registrar Libro
+          {loading ? 'Registrando...' : 'Registrar Libro'}
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 };

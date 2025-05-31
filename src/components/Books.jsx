@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useFetch from '../hooks/useFetch';
+import Modal from './Modal';
+import EditBook from './EditBook';
 
-const Books = ({ onEdit }) => {
+const Books = () => {
   const API_URL = 'http://127.0.0.1:8000/api/book';
-  const { data: libros, loading, error } = useFetch(API_URL);
+  const { data: libros, loading, error, refetch } = useFetch(API_URL);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const openModal = (libroId) => {
+    setSelectedId(libroId);
+    setIsOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+    setSelectedId(null);
+  };
 
   if (loading) {
     return (
@@ -28,7 +43,7 @@ const Books = ({ onEdit }) => {
     <div className="p-6 bg-gray-100 min-h-screen">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Lista de Libros</h2>
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {libros.map((libro) => (
+        {libros && libros.map((libro) => (
           <li
             key={libro.id}
             className="bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow"
@@ -38,14 +53,26 @@ const Books = ({ onEdit }) => {
             <p className="text-gray-600">Año: {libro.anio_publicacion}</p>
             <p className="text-gray-600">Categoría: {libro.categoria}</p>
             <button
-              onClick={() => onEdit(libro.id)}
               className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              onClick={() => openModal(libro.id)}
             >
               Editar
             </button>
           </li>
         ))}
       </ul>
+
+      <Modal isOpen={isOpen} onClose={handleCloseModal}>
+        {selectedId && (
+          <EditBook
+            libroId={selectedId}
+            onBookUpdated={() => {
+              refetch();
+              handleCloseModal();
+            }}
+          />
+        )}
+      </Modal>
     </div>
   );
 };
