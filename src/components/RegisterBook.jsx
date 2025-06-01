@@ -14,7 +14,9 @@ const RegistrarLibro = () => {
   });
 
   const [errores, setErrores] = useState({});
-  const { execute, loading } = useFetch('http://127.0.0.1:8000/api/book', 'POST', null, false);
+  // const API_URL = 'http://127.0.0.1:8000/api/book';
+  const API_URL = 'http://145.79.7.224/backend/api/book';
+  const { execute, loading } = useFetch(API_URL, 'POST', null, false);
   const navigate = useNavigate();
 
   const manejarCambio = (e) => {

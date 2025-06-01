@@ -4,7 +4,8 @@ import Modal from './Modal';
 import EditBook from './EditBook';
 
 const Books = () => {
-  const API_URL = 'http://127.0.0.1:8000/api/book';
+  const API_URL = 'http://145.79.7.224/backend/api/book';
+  // const API_URL = 'http://127.0.0.1:8000/api/book';
   const { data: libros, loading, error, refetch } = useFetch(API_URL);
 
   const [isOpen, setIsOpen] = useState(false);
