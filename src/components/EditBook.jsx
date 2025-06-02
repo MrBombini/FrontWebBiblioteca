@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const EditBook = ({ libroId, onBookUpdated }) => {
-  const API_URL = `http://145.79.7.224/backend/api/book/${libroId}`;
+  const API_URL = `http://145.79.7.224/api/book/${libroId}`;
   // const API_URL = `http://127.0.0.1:8000/api/book/${libroId}`;
   const { data, loading, error, execute } = useFetch(API_URL, 'GET');
 
