@@ -18,7 +18,7 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/'>
       <div>
         <Navbar />
         <Routes>
@@ -28,12 +28,6 @@ function App() {
           {/* Si tienes una ruta para editar, puedes agregarla así: */}
           {/* <Route path="/edit/:id" element={<EditBook />} /> */}
         </Routes>
-        {/* Si usas modal para editar libros */}
-        {/* {libroIdParaEditar && (
-          <Modal isOpen={!!libroIdParaEditar} onClose={handleCerrarEdicion}>
-            <EditBook libroId={libroIdParaEditar} onBookUpdated={handleCerrarEdicion} />
-          </Modal>
-        )} */}
       </div>
     </BrowserRouter>
   );
