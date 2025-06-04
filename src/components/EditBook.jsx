@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from 'react-router-dom';
 
 const EditBook = ({ libroId, onBookUpdated }) => {
-  const API_URL = `${import.meta.env.VITE_API_URL}/book/${libroId}`;
+  const API_URL = `${import.meta.env.VITE_API_URL_BOOK_SERVICE}/book/${libroId}`;
   const { data, loading, error, execute } = useFetch(API_URL, 'GET');
   const navigate = useNavigate();
 

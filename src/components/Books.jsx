@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import useFetch from '../hooks/useFetch';
 import Modal from './Modal';
 import EditBook from './EditBook';
+import { useNavigate } from 'react-router-dom';
 
 const Books = () => {
-  const API_URL = `${import.meta.env.VITE_API_URL}/book`;
+  const API_URL = `${import.meta.env.VITE_API_URL_BOOK_SERVICE}/book`;
   const { data: libros, loading, error, refetch } = useFetch(API_URL);
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const navigate = useNavigate();
 
   const openModal = (libroId) => {
     setSelectedId(libroId);
@@ -18,6 +20,10 @@ const Books = () => {
   const handleCloseModal = () => {
     setIsOpen(false);
     setSelectedId(null);
+  };
+
+  const handleLoan = (libroId) => {
+    navigate(`/prestamo?libroId=${libroId}`);
   };
 
   if (loading) {
@@ -52,12 +58,16 @@ const Books = () => {
             <p className="text-gray-600">Autor: {libro.autor}</p>
             <p className="text-gray-600">Año: {libro.anio_publicacion}</p>
             <p className="text-gray-600">Categoría: {libro.categoria}</p>
-            <button
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              onClick={() => openModal(libro.id)}
-            >
-              Editar
-            </button>
+            <p className="text-gray-600">Estado: {libro.estado}</p>
+            <div className="flex gap-2 mt-4">
+              <button
+                className={`bg-green-500 text-white px-4 py-2 rounded ${libro.estado === 'prestado' ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'}`}
+                onClick={() => handleLoan(libro.id)}
+                disabled={libro.estado === 'prestado'}
+              >
+                {libro.estado === 'prestado' ? 'No Disponible' : 'Pedir Préstamo'}
+              </button>
+            </div>
           </li>
         ))}
       </ul>

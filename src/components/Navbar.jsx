@@ -51,11 +51,11 @@ const Navbar = () => {
                 Lista de Libros
               </Link>
               <Link
-                to="/register"
+                to="/loans"
                 className="block px-4 py-2 hover:bg-blue-100"
                 onClick={() => setOpenLibros(false)}
               >
-                Registrar Libro
+                Lista de Préstamos
               </Link>
             </div>
           )}

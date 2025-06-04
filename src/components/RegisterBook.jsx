@@ -14,7 +14,7 @@ const RegistrarLibro = () => {
   });
 
   const [errores, setErrores] = useState({});
-  const API_URL = `${import.meta.env.VITE_API_URL}/book`;
+  const API_URL = `${import.meta.env.VITE_API_URL_BOOK_SERVICE}/book`;
   const { execute, loading } = useFetch(API_URL, 'POST', null, false);
   const navigate = useNavigate();
 

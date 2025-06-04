@@ -1,77 +1,114 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import useFetch from '../hooks/useFetch';
 
 const RegisterLoan = () => {
   const [libros, setLibros] = useState([]);
   const [libroId, setLibroId] = useState('');
   const [fechaDevolucionPrevista, setFechaDevolucionPrevista] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Obtener usuario autenticado
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const userId = 1; // ID de usuario fijo
+  const navigate = useNavigate();
+
+  // Custom hook para actualizar el estado del libro
+  const { execute: updateBookState } = useFetch(`${import.meta.env.VITE_API_URL_BOOK_SERVICE}/book/${libroId}`, 'PUT', null, false);
 
   // Cargar libros disponibles
   useEffect(() => {
     const fetchLibros = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/book`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL_BOOK_SERVICE}/book`);
         const data = await res.json();
-        // Filtra solo los disponibles
-        setLibros(data.filter(l => l.estado === 'disponible'));
+        setLibros(data);
       } catch {
-        setError('Error al cargar libros');
+        toast.error('Error al cargar libros', {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       }
     };
     fetchLibros();
   }, []);
 
-  // Leer libroId de la query si existe
-  const location = useLocation();
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const id = params.get('libroId');
-    if (id) setLibroId(id);
-  }, [location.search]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     if (!libroId || !fechaDevolucionPrevista) {
-      setError('Completa todos los campos');
+      toast.error('Completa todos los campos', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       setLoading(false);
       return;
     }
 
+    const payload = {
+      libro_id: parseInt(libroId, 10),
+      user_id: userId,
+      fecha_prestamo: new Date().toISOString().split('T')[0],
+      fecha_devolucion_prevista: fechaDevolucionPrevista,
+      estado: 'pendiente',
+    };
+
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/prestamos`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL_LOAN_SERVICE}/prestamos`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           ...(token && { 'Authorization': `Bearer ${token}` }),
         },
-        body: JSON.stringify({
-          libro_id: libroId,
-          user_id: user.id,
-          fecha_prestamo: new Date().toISOString(),
-          fecha_devolucion_prevista: fechaDevolucionPrevista,
-          estado: 'prestado',
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
-        alert('¡Préstamo registrado!');
+        // Actualizar el estado del libro a "prestado" usando el custom hook
+        const bookUpdateUrl = `${import.meta.env.VITE_API_URL_BOOK_SERVICE}/book/${libroId}`;
+        await updateBookState({ estado: 'prestado' }, 'PUT', bookUpdateUrl);
+
+        toast.success('¡Préstamo registrado exitosamente!', {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          onClose: () => navigate('/'),
+        });
         setLibroId('');
         setFechaDevolucionPrevista('');
       } else {
         const data = await res.json();
-        setError(data.message || 'Error al registrar el préstamo');
+        toast.error(data.message || 'Error al registrar el préstamo', {
+          position: 'top-right',
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       }
     } catch {
-      setError('Error de conexión');
+      toast.error('Error de conexión', {
+        position: 'top-right',
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
     setLoading(false);
   };
@@ -82,20 +119,19 @@ const RegisterLoan = () => {
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded shadow-md w-96"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Pedir Prestado un Libro</h2>
-        {error && <div className="mb-4 text-red-600">{error}</div>}
+        <h2 className="text-2xl font-bold mb-6 text-center">Registrar Préstamo</h2>
         <div className="mb-4">
           <label className="block mb-1">Libro</label>
           <select
             value={libroId}
-            onChange={e => setLibroId(e.target.value)}
+            onChange={(e) => setLibroId(e.target.value)}
             className="w-full px-3 py-2 border rounded"
             required
           >
             <option value="">Selecciona un libro</option>
-            {libros.map(libro => (
-              <option key={libro.id} value={libro.id}>
-                {libro.titulo} - {libro.autor}
+            {libros.map((libro) => (
+              <option key={libro.id} value={libro.id} disabled={libro.estado === 'prestado'}>
+                {libro.titulo} - {libro.autor} ({libro.estado})
               </option>
             ))}
           </select>
@@ -105,7 +141,7 @@ const RegisterLoan = () => {
           <input
             type="date"
             value={fechaDevolucionPrevista}
-            onChange={e => setFechaDevolucionPrevista(e.target.value)}
+            onChange={(e) => setFechaDevolucionPrevista(e.target.value)}
             className="w-full px-3 py-2 border rounded"
             required
           />
@@ -115,9 +151,10 @@ const RegisterLoan = () => {
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
           disabled={loading}
         >
-          {loading ? 'Solicitando...' : 'Pedir Préstamo'}
+          {loading ? 'Registrando...' : 'Registrar Préstamo'}
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 };

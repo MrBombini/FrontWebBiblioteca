@@ -9,6 +9,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Perfil from './components/Perfil';
 import RegisterLoan from './components/RegisterLoan';
+import Loan from './components/Loan'; // Importa el componente Loan
 
 function App() {
   // Si necesitas editar libros con modal, puedes mantener este estado:
@@ -29,10 +30,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/books" replace />} />
           <Route path="/books" element={<LibroList onEdit={handleEditarLibro} />} />
-          <Route path="/register" element={<RegistrarLibro />} />
+          <Route path="/registerbook" element={<RegistrarLibro />} />
           <Route path="/login" element={<Login />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/prestamo" element={<RegisterLoan />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/loans" element={<Loan />} /> {/* Nueva ruta para préstamos */}
           {/* Si tienes una ruta para editar, puedes agregarla así: */}
           {/* <Route path="/edit/:id" element={<EditBook />} /> */}
         </Routes>
