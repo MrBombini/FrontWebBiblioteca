@@ -14,8 +14,7 @@ const RegistrarLibro = () => {
   });
 
   const [errores, setErrores] = useState({});
-  // const API_URL = 'http://127.0.0.1:8000/api/book';
-  const API_URL = 'http://145.79.7.224/api/book';
+  const API_URL = `${import.meta.env.VITE_API_URL}/book`;
   const { execute, loading } = useFetch(API_URL, 'POST', null, false);
   const navigate = useNavigate();
 

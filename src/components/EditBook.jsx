@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import useFetch from '../hooks/useFetch';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 
 const EditBook = ({ libroId, onBookUpdated }) => {
-  const API_URL = `http://145.79.7.224/api/book/${libroId}`;
-  // const API_URL = `http://127.0.0.1:8000/api/book/${libroId}`;
+  const API_URL = `${import.meta.env.VITE_API_URL}/book/${libroId}`;
   const { data, loading, error, execute } = useFetch(API_URL, 'GET');
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     titulo: '',
@@ -57,7 +58,11 @@ const EditBook = ({ libroId, onBookUpdated }) => {
       });
     }
   };
-  
+
+  const handleLoan = () => {
+    navigate(`/prestamo?libroId=${libroId}`);
+  };
+
   if (error) return <p className="text-red-500">Error: {error.message}</p>;
 
   return (
@@ -116,6 +121,12 @@ const EditBook = ({ libroId, onBookUpdated }) => {
           Guardar Cambios
         </button>
       </form>
+      <button
+        onClick={handleLoan}
+        className="mt-4 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+      >
+        Pedir Préstamo
+      </button>
       <ToastContainer />
     </>
   );

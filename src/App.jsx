@@ -5,6 +5,11 @@ import RegistrarLibro from './components/RegisterBook';
 import EditBook from './components/EditBook';
 import Navbar from './components/Navbar';
 import Modal from './components/Modal';
+import Login from './components/Login';
+import Register from './components/Register';
+import Perfil from './components/Perfil';
+import RegisterLoan from './components/RegisterLoan';
+
 function App() {
   // Si necesitas editar libros con modal, puedes mantener este estado:
   const [libroIdParaEditar, setLibroIdParaEditar] = useState(null);
@@ -25,6 +30,9 @@ function App() {
           <Route path="/" element={<Navigate to="/books" replace />} />
           <Route path="/books" element={<LibroList onEdit={handleEditarLibro} />} />
           <Route path="/register" element={<RegistrarLibro />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/perfil" element={<Perfil />} />
+          <Route path="/prestamo" element={<RegisterLoan />} />
           {/* Si tienes una ruta para editar, puedes agregarla así: */}
           {/* <Route path="/edit/:id" element={<EditBook />} /> */}
         </Routes>
