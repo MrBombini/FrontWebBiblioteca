@@ -9,12 +9,18 @@ const RegisterLoan = () => {
   const [libroId, setLibroId] = useState('');
   const [fechaDevolucionPrevista, setFechaDevolucionPrevista] = useState('');
   const [loading, setLoading] = useState(false);
+  const [prestamos, setPrestamos] = useState([]);
 
   const userId = 1; // ID de usuario fijo
   const navigate = useNavigate();
 
   // Custom hook para actualizar el estado del libro
-  const { execute: updateBookState } = useFetch(`${import.meta.env.VITE_API_URL_BOOK_SERVICE}/book/${libroId}`, 'PUT', null, false);
+  const { execute: updateBookState } = useFetch(
+    `${import.meta.env.VITE_API_URL_BOOK_SERVICE}/book/${libroId}`,
+    'PUT',
+    null,
+    false
+  );
 
   // Cargar libros disponibles
   useEffect(() => {
@@ -35,6 +41,27 @@ const RegisterLoan = () => {
       }
     };
     fetchLibros();
+  }, []);
+
+  // Cargar préstamos del usuario (dummy visual)
+  useEffect(() => {
+    // Aquí deberías hacer fetch real, pero para demo:
+    setPrestamos([
+      {
+        id: 101,
+        libro: { titulo: 'Cien años de soledad', autor: 'Gabriel García Márquez' },
+        fecha_prestamo: '2025-06-01',
+        fecha_devolucion_prevista: '2025-06-15',
+        estado: 'pendiente',
+      },
+      {
+        id: 102,
+        libro: { titulo: '1984', autor: 'George Orwell' },
+        fecha_prestamo: '2025-05-10',
+        fecha_devolucion_prevista: '2025-05-24',
+        estado: 'devuelto',
+      },
+    ]);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -114,46 +141,97 @@ const RegisterLoan = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow-md w-96"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center">Registrar Préstamo</h2>
-        <div className="mb-4">
-          <label className="block mb-1">Libro</label>
-          <select
-            value={libroId}
-            onChange={(e) => setLibroId(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
-            required
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 flex flex-col items-center py-10">
+      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg mb-10">
+        <h2 className="text-3xl font-bold mb-6 text-center text-blue-700 drop-shadow">Solicitar Préstamo</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block mb-1 font-semibold text-blue-700">Libro</label>
+            <select
+              value={libroId}
+              onChange={(e) => setLibroId(e.target.value)}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+              required
+            >
+              <option value="">Selecciona un libro</option>
+              {libros.map((libro) => (
+                <option key={libro.id} value={libro.id} disabled={libro.estado === 'prestado'}>
+                  {libro.titulo} - {libro.autor} ({libro.estado})
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-6">
+            <label className="block mb-1 font-semibold text-blue-700">Fecha de devolución prevista</label>
+            <input
+              type="date"
+              value={fechaDevolucionPrevista}
+              onChange={(e) => setFechaDevolucionPrevista(e.target.value)}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2 rounded-full font-bold shadow hover:from-blue-700 hover:to-blue-800 transition"
+            disabled={loading}
           >
-            <option value="">Selecciona un libro</option>
-            {libros.map((libro) => (
-              <option key={libro.id} value={libro.id} disabled={libro.estado === 'prestado'}>
-                {libro.titulo} - {libro.autor} ({libro.estado})
-              </option>
-            ))}
-          </select>
+            {loading ? 'Registrando...' : 'Registrar Solicitud'}
+          </button>
+        </form>
+      </div>
+
+      <div className="w-full max-w-3xl">
+        <h3 className="text-2xl font-bold mb-4 text-blue-800 drop-shadow text-center">Tus Préstamos</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {prestamos.length === 0 ? (
+            <div className="col-span-2 bg-white rounded-xl shadow p-8 text-center text-gray-500">
+              <span className="text-4xl">📚</span>
+              <p className="mt-2">No tienes préstamos registrados.</p>
+            </div>
+          ) : (
+            prestamos.map((prestamo) => (
+              <div
+                key={prestamo.id}
+                className={`rounded-xl shadow-lg p-6 border-l-8 flex flex-col justify-between ${
+                  prestamo.estado === 'pendiente'
+                    ? 'border-yellow-500 bg-white'
+                    : 'border-green-400 bg-green-50'
+                }`}
+              >
+                <div className="flex items-center mb-2">
+                  <span className="text-2xl mr-3">
+                    {prestamo.estado === 'pendiente' ? '⏳' : '✅'}
+                  </span>
+                  <span className="font-bold text-lg text-blue-700">
+                    {prestamo.libro.titulo}
+                  </span>
+                  <span
+                    className={`ml-auto px-3 py-1 rounded-full text-xs font-semibold ${
+                      prestamo.estado === 'pendiente'
+                        ? 'bg-yellow-100 text-yellow-700'
+                        : 'bg-green-100 text-green-700'
+                    }`}
+                  >
+                    {prestamo.estado.charAt(0).toUpperCase() + prestamo.estado.slice(1)}
+                  </span>
+                </div>
+                <div className="text-gray-700 mb-1">
+                  <span className="font-semibold">Autor:</span> {prestamo.libro.autor}
+                </div>
+                <div className="flex flex-wrap gap-4 text-gray-700 mt-2">
+                  <div>
+                    <span className="font-semibold">Fecha préstamo:</span> {prestamo.fecha_prestamo}
+                  </div>
+                  <div>
+                    <span className="font-semibold">Devolución prevista:</span> {prestamo.fecha_devolucion_prevista}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
-        <div className="mb-6">
-          <label className="block mb-1">Fecha de devolución prevista</label>
-          <input
-            type="date"
-            value={fechaDevolucionPrevista}
-            onChange={(e) => setFechaDevolucionPrevista(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-          disabled={loading}
-        >
-          {loading ? 'Registrando...' : 'Registrar Préstamo'}
-        </button>
-      </form>
+      </div>
       <ToastContainer />
     </div>
   );

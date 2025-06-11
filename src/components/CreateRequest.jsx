@@ -1,85 +1,59 @@
 import React, { useState } from 'react';
-import useFetch from '../hooks/useFetch';
 
 const CreateRequest = () => {
-  const [formData, setFormData] = useState({
-    usuario_id: '',
-    descripcion: '',
-    estado: 'pendiente',
-    prestamo_id: '',
-  });
+  // Datos dummy
+  const [userId] = useState(1);
+  const [descripcion] = useState('Esta es una solicitud de prueba para el prestamo.');
 
-  // Configura el hook para la ruta de solicitudes
-  const { execute, loading, error } = useFetch(`${import.meta.env.VITE_API_URL_REQUEST_SERVICE}/solicitudes`, 'POST', null, false);
+  // Estado para mostrar el JSON generado
+  const [jsonPreview, setJsonPreview] = useState(null);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await execute(formData); // Usa el hook para enviar la solicitud
-      alert('Solicitud creada exitosamente');
-    } catch (err) {
-      console.error('Error al crear la solicitud:', err);
-      alert('Hubo un error al crear la solicitud');
-    }
+    // Solo muestra el JSON dummy, no envía nada al backend
+    setJsonPreview({
+      user_id: userId,
+      descripcion,
+    });
   };
 
   return (
-    <div>
-      <h2>Crear Solicitud</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="usuario_id">ID de Usuario:</label>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded shadow-md w-96"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-center">Crear Solicitud de Préstamo (Dummy)</h2>
+        <div className="mb-4">
+          <label className="block mb-1">ID de Usuario</label>
           <input
-            type="number"
-            id="usuario_id"
-            name="usuario_id"
-            value={formData.usuario_id}
-            onChange={handleChange}
-            required
+            type="text"
+            value={userId}
+            disabled
+            className="w-full px-3 py-2 border rounded bg-gray-100"
           />
         </div>
-        <div>
-          <label htmlFor="descripcion">Descripción:</label>
+        <div className="mb-6">
+          <label className="block mb-1">Descripción</label>
           <textarea
-            id="descripcion"
-            name="descripcion"
-            value={formData.descripcion}
-            onChange={handleChange}
-            required
-          ></textarea>
-        </div>
-        <div>
-          <label htmlFor="estado">Estado:</label>
-          <select
-            id="estado"
-            name="estado"
-            value={formData.estado}
-            onChange={handleChange}
-          >
-            <option value="pendiente">Pendiente</option>
-            <option value="aprobado">Aprobado</option>
-            <option value="rechazado">Rechazado</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="prestamo_id">ID de Préstamo (opcional):</label>
-          <input
-            type="number"
-            id="prestamo_id"
-            name="prestamo_id"
-            value={formData.prestamo_id}
-            onChange={handleChange}
+            value={descripcion}
+            disabled
+            className="w-full px-3 py-2 border rounded bg-gray-100"
+            rows={3}
           />
         </div>
-        <button type="submit" disabled={loading}>
-          {loading ? 'Creando...' : 'Crear Solicitud'}
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+        >
+          Simular Solicitud
         </button>
-        {error && <p className="text-red-500">Error: {error.message}</p>}
+        {jsonPreview && (
+          <div className="mt-6 bg-gray-100 p-4 rounded text-sm">
+            <strong>JSON Esperado:</strong>
+            <pre className="mt-2">{JSON.stringify(jsonPreview, null, 2)}</pre>
+          </div>
+        )}
       </form>
     </div>
   );

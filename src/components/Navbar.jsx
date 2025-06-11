@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Notifications from './Notifications';
 
 const Navbar = () => {
   const [openLibros, setOpenLibros] = useState(false);
@@ -31,46 +32,61 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
-      <h1 className="text-xl font-bold">Mi Biblioteca</h1>
-      <div className="flex items-center gap-4">
+    <nav className="bg-gradient-to-r from-blue-700 to-blue-500 text-white px-8 py-4 flex justify-between items-center shadow-lg">
+      <div className="flex items-center gap-8">
+        <h1
+          className="text-2xl font-extrabold cursor-pointer tracking-wide hover:underline transition"
+          onClick={() => navigate('/')}
+        >
+          <span className="inline-block mr-2">📚</span>Biblioteca
+        </h1>
         <div className="relative" ref={menuRef}>
           <button
-            className="hover:underline px-4 py-2 rounded focus:outline-none"
+            className="hover:bg-blue-600 px-4 py-2 rounded transition focus:outline-none font-semibold"
             onClick={() => setOpenLibros((prev) => !prev)}
           >
-            Libros
+            Libros <span className="ml-1">▼</span>
           </button>
           {openLibros && (
-            <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded shadow-lg z-10">
+            <div className="absolute left-0 mt-2 w-56 bg-white text-blue-900 rounded-xl shadow-xl z-20 border border-blue-100">
               <Link
                 to="/books"
-                className="block px-4 py-2 hover:bg-blue-100"
+                className="block px-5 py-3 hover:bg-blue-100 rounded-t-xl transition"
                 onClick={() => setOpenLibros(false)}
               >
-                Lista de Libros
+                📖 Lista de Libros
               </Link>
               <Link
                 to="/loans"
-                className="block px-4 py-2 hover:bg-blue-100"
+                className="block px-5 py-3 hover:bg-blue-100 transition"
                 onClick={() => setOpenLibros(false)}
               >
-                Lista de Préstamos
+                📋 Lista de Préstamos
+              </Link>
+              <Link
+                to="/penalty"
+                className="block px-5 py-3 hover:bg-blue-100 rounded-b-xl transition"
+                onClick={() => setOpenLibros(false)}
+              >
+                🚫 Sanciones
               </Link>
             </div>
           )}
         </div>
+      </div>
+      <div className="flex items-center gap-4">
+        <Notifications />
         {!isAuthenticated ? (
           <>
             <Link
               to="/login"
-              className="px-4 py-2 rounded bg-white text-blue-600 hover:bg-blue-100"
+              className="px-5 py-2 rounded-full bg-white text-blue-700 font-semibold hover:bg-blue-100 transition"
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="px-4 py-2 rounded bg-white text-blue-600 hover:bg-blue-100"
+              className="px-5 py-2 rounded-full bg-white text-blue-700 font-semibold hover:bg-blue-100 transition"
             >
               Register
             </Link>
@@ -79,13 +95,13 @@ const Navbar = () => {
           <>
             <Link
               to="/perfil"
-              className="px-4 py-2 rounded bg-white text-blue-600 hover:bg-blue-100"
+              className="px-5 py-2 rounded-full bg-white text-blue-700 font-semibold hover:bg-blue-100 transition"
             >
               Perfil
             </Link>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
+              className="px-5 py-2 rounded-full bg-red-500 text-white font-semibold hover:bg-red-600 transition"
             >
               Logout
             </button>
