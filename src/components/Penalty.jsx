@@ -48,7 +48,7 @@ const Penalty = () => {
   ]);
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 p-8">
+    <div className="flex flex-col items-center min-h-screen p-8">
       <h2 className="text-3xl font-bold mb-8 text-blue-800 drop-shadow">Sanciones del Lector</h2>
       <div className="w-full max-w-2xl flex flex-col gap-6">
         {penalties.length === 0 ? (

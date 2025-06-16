@@ -28,7 +28,7 @@ const Loan = () => {
   const prestamos = response?.data || [];
 
   return (
-    <div className="p-6 bg-gradient-to-b from-blue-100 to-blue-300 min-h-screen">
+    <div className="p-6  min-h-screen">
       <h2 className="text-3xl font-bold text-center text-blue-800 mb-10 drop-shadow">
         Lista de Préstamos
       </h2>

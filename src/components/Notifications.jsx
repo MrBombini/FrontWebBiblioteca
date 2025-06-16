@@ -28,7 +28,7 @@ const Notifications = () => {
   return (
     <div className="relative" ref={menuRef}>
       <button
-        className="relative p-2 rounded-full hover:bg-blue-500 focus:outline-none"
+        className="relative p-2 rounded-full bg-indigo-300 hover:bg-indigo-500 focus:outline-none"
         onClick={() => setOpen((prev) => !prev)}
         aria-label="Notificaciones"
       >

@@ -141,7 +141,7 @@ const RegisterLoan = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 flex flex-col items-center py-10">
+    <div className="min-h-screen flex flex-col items-center py-10">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-lg mb-10">
         <h2 className="text-3xl font-bold mb-6 text-center text-blue-700 drop-shadow">Solicitar Préstamo</h2>
         <form onSubmit={handleSubmit}>

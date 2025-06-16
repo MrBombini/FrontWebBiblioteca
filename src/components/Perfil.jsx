@@ -50,7 +50,7 @@ const Perfil = () => {
   if (!user) return null;
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="flex items-center justify-center min-h-screen ">
       <div className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-md flex flex-col items-center">
         <img
           src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
