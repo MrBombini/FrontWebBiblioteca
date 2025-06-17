@@ -138,7 +138,7 @@ const Dashboard = () => {
                         ))}
                     </div> */}
                     <div className="bg-white rounded-2xl shadow-lg p-6">
-                        <Books search={search} />
+                        {/* <Books search={search} /> */}
                     </div>
                 </div>
                 {/* Botón para subir arriba */}

@@ -13,7 +13,7 @@ const Login = () => {
 
     try {
       // 1. Login: obtener token
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL_AUTH_SERVICE}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -24,7 +24,7 @@ const Login = () => {
         localStorage.setItem('token', data.access_token);
 
         // 2. Obtener datos del usuario
-        const meRes = await fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+        const meRes = await fetch(`${import.meta.env.VITE_API_URL_AUTH_SERVICE}/auth/me`, {
           headers: {
             'Authorization': `Bearer ${data.access_token}`,
             'Content-Type': 'application/json',

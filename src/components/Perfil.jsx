@@ -13,7 +13,7 @@ const Perfil = () => {
     }
 
     // Obtener datos del usuario
-    fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+    fetch(`${import.meta.env.VITE_API_URL_AUTH_SERVICE}/auth/me`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const Perfil = () => {
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
     if (token) {
-      await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+      await fetch(`${import.meta.env.VITE_API_URL_AUTH_SERVICE}/auth/logout`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -28,7 +28,7 @@ const RegisterLoan = () => {
       try {
         const res = await fetch(`${import.meta.env.VITE_API_URL_BOOK_SERVICE}/book`);
         const data = await res.json();
-        setLibros(data);
+        setLibros(Array.isArray(data.data) ? data.data : []); // <-- Cambia aquí
       } catch {
         toast.error('Error al cargar libros', {
           position: 'top-right',
