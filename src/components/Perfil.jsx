@@ -13,7 +13,7 @@ const Perfil = () => {
     }
 
     // Obtener datos del usuario
-    fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+    fetch(`${import.meta.env.VITE_API_URL_AUTH_SERVICE}/auth/me`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const Perfil = () => {
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
     if (token) {
-      await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+      await fetch(`${import.meta.env.VITE_API_URL_AUTH_SERVICE}/auth/logout`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -50,7 +50,7 @@ const Perfil = () => {
   if (!user) return null;
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="flex items-center justify-center min-h-screen ">
       <div className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-md flex flex-col items-center">
         <img
           src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"

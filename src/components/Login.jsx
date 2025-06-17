@@ -13,7 +13,7 @@ const Login = () => {
 
     try {
       // 1. Login: obtener token
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL_AUTH_SERVICE}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -24,7 +24,7 @@ const Login = () => {
         localStorage.setItem('token', data.access_token);
 
         // 2. Obtener datos del usuario
-        const meRes = await fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+        const meRes = await fetch(`${import.meta.env.VITE_API_URL_AUTH_SERVICE}/auth/me`, {
           headers: {
             'Authorization': `Bearer ${data.access_token}`,
             'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-100 to-indigo-300">
       <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-2xl overflow-hidden max-w-3xl w-full">
         {/* Imagen lateral */}
         <div className="hidden md:flex items-center justify-center bg-blue-100 p-8 w-1/2">

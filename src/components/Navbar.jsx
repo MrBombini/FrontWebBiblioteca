@@ -32,17 +32,17 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-blue-700 to-blue-500 text-white px-8 py-4 flex justify-between items-center shadow-lg">
+    <nav className="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center shadow-lg bg-white rounded-lg">
       <div className="flex items-center gap-8">
         <h1
-          className="text-2xl font-extrabold cursor-pointer tracking-wide hover:underline transition"
+          className="text-2xl font-extrabold cursor-pointer tracking-wide hover:underline hover:text-indigo-600 transition "
           onClick={() => navigate('/')}
         >
           <span className="inline-block mr-2">📚</span>Biblioteca
         </h1>
         <div className="relative" ref={menuRef}>
           <button
-            className="hover:bg-blue-600 px-4 py-2 rounded transition focus:outline-none font-semibold"
+            className="hover:bg-blue-100 px-4 py-2 rounded transition focus:outline-none font-semibold"
             onClick={() => setOpenLibros((prev) => !prev)}
           >
             Libros <span className="ml-1">▼</span>
@@ -80,13 +80,13 @@ const Navbar = () => {
           <>
             <Link
               to="/login"
-              className="px-5 py-2 rounded-full bg-white text-blue-700 font-semibold hover:bg-blue-100 transition"
+              className="px-5 py-2 rounded-full bg-white font-semibold hover:bg-blue-100 transition"
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="px-5 py-2 rounded-full bg-white text-blue-700 font-semibold hover:bg-blue-100 transition"
+              className="px-5 py-2 rounded-full bg-white  font-semibold hover:bg-blue-100 transition"
             >
               Register
             </Link>
@@ -95,7 +95,7 @@ const Navbar = () => {
           <>
             <Link
               to="/perfil"
-              className="px-5 py-2 rounded-full bg-white text-blue-700 font-semibold hover:bg-blue-100 transition"
+              className="px-5 py-2 rounded-full bg-white  font-semibold hover:bg-blue-100 transition"
             >
               Perfil
             </Link>

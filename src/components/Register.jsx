@@ -14,7 +14,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL_AUTH_SERVICE}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -39,7 +39,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-lime-100 to-green-200">
       <div className="flex flex-col md:flex-row bg-white rounded-2xl shadow-2xl overflow-hidden max-w-3xl w-full">
         {/* Imagen lateral */}
         <div className="hidden md:flex items-center justify-center bg-blue-100 p-8 w-1/2">
