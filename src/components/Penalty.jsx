@@ -1,51 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
+import useFetch from '../hooks/useFetch';
 
 const Penalty = () => {
-  // Sanciones dummy para mostrar
-  const [penalties] = useState([
-    {
-      id: 1,
-      motivo: 'Retraso en la devolución',
-      fecha: '2025-06-01',
-      estado: 'Activa',
-      dias: 5,
-    },
-    {
-      id: 2,
-      motivo: 'Libro dañado',
-      fecha: '2025-05-10',
-      estado: 'Resuelta',
-      dias: 0,
-    },
-    {
-      id: 3,
-      motivo: 'Libro dañado',
-      fecha: '2025-05-10',
-      estado: 'Resuelta',
-      dias: 0,
-    },
-    {
-      id: 4,
-      motivo: 'Libro dañado',
-      fecha: '2025-05-10',
-      estado: 'Resuelta',
-      dias: 0,
-    },
-    {
-      id: 5,
-      motivo: 'Libro dañado',
-      fecha: '2025-05-10',
-      estado: 'Resuelta',
-      dias: 0,
-    },
-    {
-      id: 6,
-      motivo: 'Libro dañado',
-      fecha: '2025-05-10',
-      estado: 'Resuelta',
-      dias: 0,
-    },
-  ]);
+  const API_URL = `${import.meta.env.VITE_API_URL_PENALTY_SERVICE}/sanciones`;
+  const { data: response, loading, error } = useFetch(API_URL, 'GET');
+
+  // Extraer el array `data` del JSON de respuesta
+  const penalties = response?.data || [];
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+        <p className="ml-4 text-blue-500 font-semibold">Cargando sanciones...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500 font-semibold">
+          ❌ Error al cargar las sanciones: {error.message}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center min-h-screen p-8">

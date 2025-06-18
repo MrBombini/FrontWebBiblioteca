@@ -51,76 +51,92 @@ const Dashboard = () => {
         <div className="min-h-screen flex flex-col bg-gradient-to-b">
             <main className='container mx-auto px-4 py-8'>
                 <section id="home" className="rounded-2xl p-8 mb-12 shadow-xl transition-all duration-300 bg-[#01746d]">
-                    <div className="max-w-3xl mx-auto text-center">
-                        <h1 className="text-5xl font-extrabold mb-4 leading-tight hero-title-light text-[#e8cd01] drop-shadow">
-                            Bienvenido a la Biblioteca
-                        </h1>
+                <div className="max-w-3xl mx-auto text-center space-y-6">
 
-                        <div className="flex flex-col sm:flex-row justify-center gap-4">
-                            <input
-                                type="text"
-                                value={search}
-                                onChange={e => setSearch(e.target.value)}
-                                placeholder="🔎 Buscar libros o autores..."
-                                className="w-full max-w-md px-5 py-3 border-2 border-[#d50612] rounded-full shadow focus:outline-none focus:border-purple-600 transition bg-amber-50"
-                            />
-                        </div>
+{/* Título principal */}
+<h1 className="text-5xl font-extrabold leading-tight text-[#e8cd01] drop-shadow hero-title-light">
+  Bienvenido a la Biblioteca
+</h1>
 
-                        <div className="flex flex-col sm:flex-row items-start gap-6 p-5">
-                            <div className="flex flex-col gap-2">
-                                {/* Combo de grupo */}
-                                <select
-                                    name="mainGroup"
-                                    id="mainGroup"
-                                    className="w-150 max-w-md px-5 py-3 border-2 border-orange-400 rounded-full shadow focus:outline-none focus:border-orange-600 transition bg-amber-50"
-                                    value={mainGroup}
-                                    onChange={e => {
-                                        setMainGroup(e.target.value);
-                                        setSelectedCategory(""); // Reinicia la categoría al cambiar grupo
-                                    }}
-                                >
-                                    <option value="" disabled hidden>Selecciona tipo de libros</option>
-                                    {grupos.map(g => (
-                                        <option key={g.value} value={g.value}>{g.label}</option>
-                                    ))}
-                                </select>
-                                {/* Combo de categorías filtradas */}
-                                <select
-                                    name="categories"
-                                    id="categories"
-                                    className="w-150 max-w-md px-5 py-3 border-2 border-purple-400 rounded-full shadow focus:outline-none focus:border-purple-600 transition bg-amber-50"
-                                    value={selectedCategory}
-                                    onChange={e => setSelectedCategory(e.target.value)}
-                                    disabled={!mainGroup}
-                                >
-                                    <option value="" disabled hidden>Selecciona una categoría</option>
-                                    {categoriasFiltradas.map((cat) => (
-                                        <option key={cat.id} value={cat.id}>
-                                            {cat.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                <div></div>
-                                {/* Casillas de verificación debajo del combo */}
-                                <div className="flex items-center gap-4 mt-2">
-                                    <label className="flex items-center gap-1">
-                                        <input type="checkbox" />
-                                        Libros prestados
-                                    </label>
-                                </div>
-                            </div>
-                            {selectedCategory && (
-                                <div className="text-left text-gray-700 w-72 min-h-[80px] px-6 py-2 rounded-2xl shadow transition font-semibold tracking-wide bg-indigo-50 flex flex-col justify-center">
-                                    <h2 className="text-xl font-semibold">
-                                        {categorias.find(cat => String(cat.id) === selectedCategory)?.name}
-                                    </h2>
-                                    <p className='text-sm mt-2'>
-                                        {categorias.find(cat => String(cat.id) === selectedCategory)?.description}
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
+{/* Buscador */}
+<div className="flex justify-center">
+  <input
+    type="text"
+    value={search}
+    onChange={e => setSearch(e.target.value)}
+    placeholder="🔎 Buscar libros o autores..."
+    className="w-full max-w-md px-5 py-3 border-2 border-[#d50612] rounded-full shadow focus:outline-none focus:border-purple-600 transition bg-amber-50"
+  />
+</div>
+
+{/* Filtros y resumen */}
+<div className="flex flex-col sm:flex-row items-start justify-center gap-8 p-5">
+
+  {/* Controles de filtro */}
+  <div className="flex flex-col gap-4">
+
+    {/* Selección de grupo */}
+    <select
+      name="mainGroup"
+      id="mainGroup"
+      className="w-full max-w-md px-5 py-3 border-2 border-orange-400 rounded-full shadow focus:outline-none focus:border-orange-600 transition bg-amber-50"
+      value={mainGroup}
+      onChange={e => {
+        setMainGroup(e.target.value);
+        setSelectedCategory(""); // Reinicia la categoría
+      }}
+    >
+      <option value="" disabled hidden>Selecciona tipo de libros</option>
+      {grupos.map(g => (
+        <option key={g.value} value={g.value}>{g.label}</option>
+      ))}
+    </select>
+
+    {/* Selección de categoría */}
+    <select
+      name="categories"
+      id="categories"
+      className="w-full max-w-md px-5 py-3 border-2 border-purple-400 rounded-full shadow focus:outline-none focus:border-purple-600 transition bg-amber-50"
+      value={selectedCategory}
+      onChange={e => setSelectedCategory(e.target.value)}
+      disabled={!mainGroup}
+    >
+      <option value="" disabled hidden>Selecciona una categoría</option>
+      {categoriasFiltradas.map((cat) => (
+        <option key={cat.id} value={cat.id}>
+          {cat.name}
+        </option>
+      ))}
+    </select>
+
+    {/* Filtro extra: checkbox */}
+    <div className="flex items-center gap-2 mt-2">
+      <label className="flex items-center gap-2">
+        <input type="checkbox" />
+        Libros prestados
+      </label>
+    </div>
+  </div>
+
+  {/* Detalles de categoría */}
+  <div className="text-left text-gray-700 w-72 min-h-[120px] px-6 py-4 rounded-2xl shadow bg-indigo-50 flex flex-col justify-center">
+    {!selectedCategory ? (
+      <h2 className="text-xl font-semibold">Selección de libro</h2>
+    ) : (
+      <>
+        <h2 className="text-xl font-semibold">
+          {categorias.find(cat => String(cat.id) === selectedCategory)?.name}
+        </h2>
+        <p className="text-sm mt-2">
+          {categorias.find(cat => String(cat.id) === selectedCategory)?.description}
+        </p>
+      </>
+    )}
+  </div>
+
+</div>
+</div>
+
                 </section>
 
                 <div className="max-w mx-auto flex-1">

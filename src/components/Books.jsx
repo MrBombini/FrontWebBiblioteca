@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useFetch from '../hooks/useFetch';
 import Modal from './Modal';
+import CreateRequest from './CreateRequest';
 import { useNavigate } from 'react-router-dom';
 import BooksTable from './BooksTable';
 
@@ -26,7 +27,6 @@ const Books = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
-  const navigate = useNavigate();
 
   const openModal = (book) => {
     setSelectedBook(book);
@@ -36,14 +36,6 @@ const Books = () => {
   const handleCloseModal = () => {
     setIsOpen(false);
     setSelectedBook(null);
-  };
-
-  const handleLoan = (libroId) => {
-    navigate(`/prestamo?libroId=${libroId}`);
-  };
-
-  const handleRequest = () => {
-    navigate(`/solicitud`);
   };
 
   const handlePageChange = (newPage) => {
@@ -78,7 +70,6 @@ const Books = () => {
           <li
             key={libro.id}
             className="bg-white shadow-xl rounded-2xl p-6 flex flex-col justify-between relative hover:scale-105 transition-transform cursor-pointer"
-            onClick={() => openModal(libro)}
           >
             <div>
               <img
@@ -101,10 +92,10 @@ const Books = () => {
                     ? 'opacity-50 cursor-not-allowed'
                     : 'hover:bg-green-600'
                 }`}
-                onClick={(e) => { e.stopPropagation(); handleLoan(libro.id); }}
+                onClick={() => openModal(libro)}
                 disabled={libro.estado === 'prestado'}
               >
-                {libro.estado === 'prestado' ? 'No Disponible' : 'Pedir Préstamo'}
+                {libro.estado === 'prestado' ? 'No Disponible' : 'Solicitar Préstamo'}
               </button>
             </div>
           </li>
@@ -112,36 +103,13 @@ const Books = () => {
       </ul>
 
       <div>
-        <BooksTable/>
+        <BooksTable />
       </div>
 
-      {/* Modal de detalles del libro */}
+      {/* Modal para solicitar préstamo */}
       <Modal isOpen={isOpen} onClose={handleCloseModal}>
         {selectedBook && (
-          <div className="flex flex-col items-center p-4">
-            <img
-              src={selectedBook.portada || 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=cover&w=200&q=80'}
-              alt="Portada del libro"
-              className="w-40 h-60 object-cover rounded shadow mb-6"
-            />
-            <h3 className="text-3xl font-bold mb-2 text-blue-700">{selectedBook.titulo}</h3>
-            <p className="mb-1"><span className="font-semibold">Autor:</span> {selectedBook.autor}</p>
-            <p className="mb-1"><span className="font-semibold">Año:</span> {selectedBook.anio_publicacion}</p>
-            <p className="mb-1"><span className="font-semibold">Categoría:</span> {selectedBook.categoria}</p>
-            <p className="mb-3"><span className="font-semibold">Estado:</span> {selectedBook.estado}</p>
-            <button
-              className={`mt-4 bg-green-600 text-white px-6 py-2 rounded-full font-bold shadow hover:bg-green-700 transition ${
-                selectedBook.estado === 'prestado' ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-              onClick={() => {
-                if (!selectedBook.dummy) handleLoan(selectedBook.id);
-                else handleRequest(selectedBook.id);
-              }}
-              disabled={selectedBook.estado === 'prestado'}
-            >
-              {selectedBook.estado === 'prestado' ? 'No Disponible' : 'Pedir Préstamo'}
-            </button>
-          </div>
+          <CreateRequest book={selectedBook} onClose={handleCloseModal} />
         )}
       </Modal>
     </div>
