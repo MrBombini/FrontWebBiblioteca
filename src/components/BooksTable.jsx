@@ -27,7 +27,6 @@ const BooksTable = () => {
             <table className="min-w-full bg-white rounded-xl shadow">
               <thead>
                 <tr>
-                  <th className="px-4 py-2 border-b">ID</th>
                   <th className="px-4 py-2 border-b">Título</th>
                   <th className="px-4 py-2 border-b">Autor</th>
                   <th className="px-4 py-2 border-b">Año</th>
@@ -47,19 +46,18 @@ const BooksTable = () => {
                 ) : (
                   libros.map((libro) => (
                     <tr key={libro.id} className="hover:bg-blue-50 transition">
-                      <td className="px-4 py-2 border-b">{libro.id}</td>
-                      <td className="px-4 py-2 border-b">{libro.titulo}</td>
-                      <td className="px-4 py-2 border-b">{libro.autor}</td>
-                      <td className="px-4 py-2 border-b">{libro.anio_publicacion}</td>
-                      <td className="px-4 py-2 border-b">{libro.categoria}</td>
-                      <td className="px-4 py-2 border-b">
+                      <td className="px-4 py-2 border-b text-center">{libro.titulo}</td>
+                      <td className="px-4 py-2 border-b text-center">{libro.autor}</td>
+                      <td className="px-4 py-2 border-b text-center">{libro.anio_publicacion}</td>
+                      <td className="px-4 py-2 border-b text-center">{libro.categoria}</td>
+                      <td className="px-4 py-2 border-b text-center">
                         <span className={`px-2 py-1 rounded-full text-xs font-semibold
                           ${libro.estado === 'disponible' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                           {libro.estado}
                         </span>
                       </td>
-                      <td className="px-4 py-2 border-b">{new Date(libro.created_at).toLocaleString()}</td>
-                      <td className="px-4 py-2 border-b">{new Date(libro.updated_at).toLocaleString()}</td>
+                      <td className="px-4 py-2 border-b text-center">{new Date(libro.created_at).toLocaleString()}</td>
+                      <td className="px-4 py-2 border-b text-center">{new Date(libro.updated_at).toLocaleString()}</td>
                     </tr>
                   ))
                 )}

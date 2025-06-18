@@ -33,7 +33,7 @@ const Login = () => {
         if (meRes.ok) {
           const user = await meRes.json();
           localStorage.setItem('user', JSON.stringify(user));
-          window.location.href = '/perfil';
+          window.location.href = '/';
         } else {
           setError('No se pudo obtener el perfil');
         }

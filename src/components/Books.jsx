@@ -72,7 +72,7 @@ const Books = () => {
 
   return (
     <div className="p-6 min-h-screen">
-      <h2 className="text-3xl font-bold text-center text-blue-800 mb-10 drop-shadow">Lista de Libros</h2>
+      <h2 className="text-3xl font-bold text-center text-[#e8cd01] mb-10 drop-shadow">Lista de Libros</h2>
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {librosAleatorios.map((libro) => (
           <li
