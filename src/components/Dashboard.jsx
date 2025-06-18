@@ -50,9 +50,9 @@ const Dashboard = () => {
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-b">
             <main className='container mx-auto px-4 py-8'>
-                <section id="home" className="rounded-2xl p-8 mb-12 shadow-xl transition-all duration-300 bg-gradient-to-br from-blue-50 to-indigo-100">
+                <section id="home" className="rounded-2xl p-8 mb-12 shadow-xl transition-all duration-300 bg-[#01746d]">
                     <div className="max-w-3xl mx-auto text-center">
-                        <h1 className="text-5xl font-extrabold mb-4 leading-tight hero-title-light text-indigo-600 drop-shadow">
+                        <h1 className="text-5xl font-extrabold mb-4 leading-tight hero-title-light text-[#e8cd01] drop-shadow">
                             Bienvenido a la Biblioteca
                         </h1>
 
@@ -62,7 +62,7 @@ const Dashboard = () => {
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
                                 placeholder="🔎 Buscar libros o autores..."
-                                className="w-full max-w-md px-5 py-3 border-2 border-purple-400 rounded-full shadow focus:outline-none focus:border-purple-600 transition"
+                                className="w-full max-w-md px-5 py-3 border-2 border-[#d50612] rounded-full shadow focus:outline-none focus:border-purple-600 transition bg-amber-50"
                             />
                         </div>
 
@@ -72,7 +72,7 @@ const Dashboard = () => {
                                 <select
                                     name="mainGroup"
                                     id="mainGroup"
-                                    className="w-150 max-w-md px-5 py-3 border-2 border-orange-400 rounded-full shadow focus:outline-none focus:border-orange-600 transition"
+                                    className="w-150 max-w-md px-5 py-3 border-2 border-orange-400 rounded-full shadow focus:outline-none focus:border-orange-600 transition bg-amber-50"
                                     value={mainGroup}
                                     onChange={e => {
                                         setMainGroup(e.target.value);
@@ -88,7 +88,7 @@ const Dashboard = () => {
                                 <select
                                     name="categories"
                                     id="categories"
-                                    className="w-150 max-w-md px-5 py-3 border-2 border-purple-400 rounded-full shadow focus:outline-none focus:border-purple-600 transition"
+                                    className="w-150 max-w-md px-5 py-3 border-2 border-purple-400 rounded-full shadow focus:outline-none focus:border-purple-600 transition bg-amber-50"
                                     value={selectedCategory}
                                     onChange={e => setSelectedCategory(e.target.value)}
                                     disabled={!mainGroup}
@@ -100,6 +100,7 @@ const Dashboard = () => {
                                         </option>
                                     ))}
                                 </select>
+                                <div></div>
                                 {/* Casillas de verificación debajo del combo */}
                                 <div className="flex items-center gap-4 mt-2">
                                     <label className="flex items-center gap-1">
@@ -125,7 +126,7 @@ const Dashboard = () => {
                 <div className="max-w mx-auto flex-1">
 
 
-                    <h1 className="text-4xl font-extrabold text-center mb-8 text-indigo-600 drop-shadow">Libros Populares</h1>
+                    <h1 className="text-4xl font-extrabold text-center mb-8 text-[#e8cd01] drop-shadow">Libros Populares</h1>
 
                     {/* <div className="flex flex-wrap justify-center gap-4 mb-10">
                         {categorias.map((cat) => (
@@ -138,7 +139,7 @@ const Dashboard = () => {
                         ))}
                     </div> */}
                     <div className="bg-white rounded-2xl shadow-lg p-6">
-                        {/* <Books search={search} /> */}
+                        <Books search={search} />
                     </div>
                 </div>
                 {/* Botón para subir arriba */}
